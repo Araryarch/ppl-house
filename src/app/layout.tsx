@@ -1,35 +1,47 @@
+import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
+import { AuthProvider } from '../context/auth-context'
+import { HouseholdProvider } from '../context/household-context'
+import { ThemeProvider } from '@/components/theme-provider'
+import { MainLayout } from '@/components/main-layout'
 import './globals.css'
 
-import type { Metadata } from 'next'
-
-import Providers from '@/app/providers'
-import { BASE_METADATA } from '@/contents/metadata'
-import { Inter, ClashDisplay } from '@/lib/font'
-import { cn } from '@/lib/utils'
-
-import { GoogleAnalytics } from '@next/third-parties/google'
-
 export const metadata: Metadata = {
-  ...BASE_METADATA,
+  title: 'Chore Manager - Household Task Management',
+  description:
+    'Manage household chores and tasks efficiently with rotation strategies',
+  generator: 'v0.app',
+  icons: {
+    icon: [
+      {
+        url: '/icon-light-32x32.png',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/icon-dark-32x32.png',
+        media: '(prefers-color-scheme: dark)',
+      },
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+    apple: '/apple-icon.png',
+  },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout() {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          rel="shortcut icon"
-          href="/images/favicon.png"
-          type="image/x-icon"
-        />
-      </head>
-      <body className={cn(Inter.variable, ClashDisplay.variable, 'dark')}>
-        <Providers>{children}</Providers>
-        <GoogleAnalytics gaId="" />
+      <body className={`font-sans antialiased`}>
+        <ThemeProvider>
+          <AuthProvider>
+            <HouseholdProvider>
+              <MainLayout />
+            </HouseholdProvider>
+          </AuthProvider>
+        </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
